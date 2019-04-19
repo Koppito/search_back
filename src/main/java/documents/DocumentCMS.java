@@ -14,7 +14,7 @@ public class DocumentCMS implements DocumentDAO {
 		ClassLoader classLoader = new DocumentCMS().getClass().getClassLoader();
 		URL resource = classLoader.getResource(filename);
 		if (resource == null) {
-			// TODO: Rause not found exception when file isn't found
+			// TODO: Raise not found exception when file isn't found
 			return new Document("Not Found", "Not Found");
 		}
 		File file = new File(resource.getFile());

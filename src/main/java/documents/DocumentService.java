@@ -4,7 +4,7 @@ public class DocumentService {
 	
 	private DocumentDAO db = new DocumentCMS(); 
 	
-	public Document GetDocument(String id) {
+	public Document getDocument(String id) {
 		return db.GetDocument(id);
 	}
 	
