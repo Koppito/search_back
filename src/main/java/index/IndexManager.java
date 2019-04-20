@@ -24,6 +24,7 @@ import util.BytesUtil;
 import util.FileUtils;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,8 @@ public class IndexManager {
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
 	
 	public static void createIndexes() {
+		startPostUpdateWorkers();
+		
 		// TODO: Delete previous post index and empty big queue
 		vocabulary = new HashMap<String, Word>();
 		try {
@@ -155,6 +158,14 @@ public class IndexManager {
 		}
 		
 		return "error";
+	}
+	
+	private static void startPostUpdateWorkers() {
+		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		
+	    for (int i = 0; i < 1; i++) {
+	        executorService.execute(new PostUpdateTask());
+	    }
 	}
 	
 	
