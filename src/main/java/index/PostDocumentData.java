@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class PostDocumentData implements Serializable {
 	
+	private static final long serialVersionUID = 4797629461086614797L;
 	public String document;
 	public int termFrequency;
 	
