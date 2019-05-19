@@ -39,6 +39,24 @@ public class PostDao {
         em.close();
     }
     
+    @Transactional
+    public void update(Post post) {
+    	EntityManager em = emf.createEntityManager();
+    	EntityTransaction tx = em.getTransaction();
+    	Post updated = em.find(Post.class, post.word);
+    	
+    	tx.begin();
+    	try {
+    		updated.documents = post.documents;
+    		tx.commit();
+    	} catch (Exception e) {
+    		tx.rollback();
+    	}
+        
+        em.close();
+    }
+    
+    
     public List<Post> getAllPosts() {
     	EntityManager em = emf.createEntityManager();
         TypedQuery<Post> query = em.createQuery(
@@ -82,7 +100,8 @@ public class PostDao {
     public static class JpaResultHelper {
         public static Object getSingleResultOrNull(Query query){
             List results = query.getResultList();
-        	// System.out.println(String.format("Got -> %s", results.toString()));
+            if (results.size() >= 2)
+            	System.out.println(String.format("Got %d -> %s", results.size(), results.toString()));
             
             if (results.isEmpty()) return null;
             else if (results.size() == 1) return results.get(0);

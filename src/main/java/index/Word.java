@@ -15,4 +15,9 @@ public class Word implements Serializable {
 		this.termFrequency = termFrequency;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("Word(%s, %d, %d)", this.word, this.nr, this.termFrequency);
+	}
+	
 }

@@ -33,7 +33,7 @@ public class IndexManager {
 	
 	private static int updatePostThreadLimit = 1000;
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
-	public static final int nWorkers = 5;
+	public static final int nWorkers = 20;
 	
 	public static void createIndexes(boolean force) {
 		if (!force) {
@@ -112,6 +112,8 @@ public class IndexManager {
 			Word w = new Word(post.word, nr, maxTF);
 			vocabulary.put(post.word, w);
 		}
+		
+		System.out.println(String.format("Loaded %d words", vocabulary.keySet().size()));
 	}
 	
 	public static HashMap<String, Word> getVocabulary() {

@@ -45,7 +45,7 @@ public class PostUpdateTask  implements Runnable {
 						post.addDocument(toSave);
 						Arrays.sort(post.documents);
 						
-						dao.persist(post);
+						dao.update(post);
 					} else {						
 						dao.persist(entry);
 					}

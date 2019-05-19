@@ -16,19 +16,19 @@ public class Main {
 		port(8081);
 		get("/ping", (req, res) -> "pong");
 		
-		get("/search", (req, res) -> {
+		get("/back/search", (req, res) -> {
 			res.type("application/json");
 			String query = req.queryParams("q");
-			return new Gson().toJson(searchService.searchDocuments(query));
+			return new Gson().toJson(searchService.searchDocuments(query, 20));
 		});
 		
-		get("/documents/:id", (req, res) -> {
+		get("/back/documents/:id", (req, res) -> {
 			res.type("application/json");
 			String id = req.params(":id");
 			return new Gson().toJson(documentService.getDocument(id));
 		});
 		
-		post("/search/index", (req, res) -> {
+		post("/back/search/index", (req, res) -> {
 			boolean force = (req.queryParams("force") == "");
 			IndexManager.createIndexes(force);
 			return "done";

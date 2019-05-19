@@ -8,6 +8,7 @@ import java.util.List;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
@@ -17,6 +18,7 @@ import util.ArrayUtils;
 public class Post implements Serializable {
 	
 	private static final long serialVersionUID = -1267212724232946255L;
+	@Id
 	public String word;
 	public PostDocumentData[] documents = new PostDocumentData[1];
 	
@@ -31,6 +33,13 @@ public class Post implements Serializable {
 	}
 	
 	public void addDocument(PostDocumentData pd) {
+		// Before adding a doc, check to see if it's not already in there just in case
+		for (PostDocumentData d : documents) {
+			if (pd.document == d.document) {
+				return;
+			}
+		}
+		
 		ArrayList<PostDocumentData> l = (ArrayList<PostDocumentData>) ArrayUtils.convertArrayToList(this.documents);
 		l.add(pd);
 		PostDocumentData[] p = new PostDocumentData[l.size()];
