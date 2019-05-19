@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import documents.Document;
+import documents.DocumentService;
 import index.IndexManager;
 import index.Post;
 import index.PostDao;
@@ -64,8 +65,8 @@ public class SearchService {
 		
 		ArrayList<Document> results = new ArrayList<Document>();
 		for (DocumentRank d : candidatesToOrder) {
-			// TODO: Fill text
-			results.add(new Document(d.docData.document.replace(".txt", ""), "test"));
+			String docID = d.docData.document.replace(".txt", "");
+			results.add(new Document(docID, new DocumentService().getDocumentSample(docID, 5)));
 		}
 		
 		return new Search(results, new Paging(0, limit));

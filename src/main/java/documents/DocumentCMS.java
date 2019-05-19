@@ -9,7 +9,7 @@ import java.net.URL;
 
 public class DocumentCMS implements DocumentDAO {
 	
-	public Document GetDocument(String id) {
+	public Document GetDocument(String id, int limit) {
 		String filename = String.format("documents/%s.txt", id);
 		ClassLoader classLoader = new DocumentCMS().getClass().getClassLoader();
 		URL resource = classLoader.getResource(filename);
@@ -24,10 +24,12 @@ public class DocumentCMS implements DocumentDAO {
 			return new Document("Not Found", "Not Found");
 		}
 		
-		return new Document(id, GetFileContent(file));
+		return new Document(id, GetFileContent(file, limit));
 	}
 	
-	private String GetFileContent(File file) {
+	private String GetFileContent(File file, int limit) {
+		int counter = 0;
+		if (limit == -1) counter = -5;
 		try {			
 			InputStream is = new FileInputStream(file);
 			BufferedReader buf = new BufferedReader(new InputStreamReader(is));
@@ -35,9 +37,12 @@ public class DocumentCMS implements DocumentDAO {
 			String line = buf.readLine();
 			StringBuilder sb = new StringBuilder();
 			
-			while(line != null){
+			while(line != null && counter < limit) {
 				sb.append(line).append("\n");
 				line = buf.readLine();
+				
+				if (limit != -1) 					
+					counter++;
 			}
 			
 			return sb.toString();
