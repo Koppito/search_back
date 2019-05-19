@@ -32,19 +32,20 @@ import java.util.concurrent.TimeUnit;
 public class IndexManager {
 	
 	private static int updatePostThreadLimit = 1000;
-	
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
+	private static final int nWorkers = 10;
 	
 	public static void createIndexes() {
-		startPostUpdateWorkers();
-		
 		// TODO: Delete previous post index and empty big queue
 		vocabulary = new HashMap<String, Word>();
+		PostDao.getInstance().deleteAll();
 		try {
 			Queue.getInstance().removeAll();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		startPostUpdateWorkers();
 
 		ClassLoader classLoader = new IndexManager().getClass().getClassLoader();
 		URL documents = classLoader.getResource("./documents");
@@ -83,8 +84,7 @@ public class IndexManager {
 				
 				long end = System.currentTimeMillis();
 				float sec = (end - start); 
-				System.out.println(sec + " ms");
-				System.out.println(String.format("Processed %s", fileName));
+				System.out.println(String.format("Processed %s time -> %fms", fileName, sec));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -98,6 +98,10 @@ public class IndexManager {
 	}
 	 
 	public static void loadVocabulary() {
+		List<Post> posts = PostDao.getInstance().getAllPosts();
+		System.out.println(posts.size());
+		
+		//TODO: Implement vocabulary loading
 		/*
 		Iterator it = getDBIterator();
 		if (it == null) {
@@ -161,9 +165,9 @@ public class IndexManager {
 	}
 	
 	private static void startPostUpdateWorkers() {
-		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		ExecutorService executorService = Executors.newFixedThreadPool(nWorkers);
 		
-	    for (int i = 0; i < 1; i++) {
+	    for (int i = 0; i < nWorkers; i++) {
 	        executorService.execute(new PostUpdateTask());
 	    }
 	}

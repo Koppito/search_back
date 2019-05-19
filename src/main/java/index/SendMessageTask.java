@@ -17,7 +17,11 @@ public class SendMessageTask implements Runnable {
 		LinkedList<PostDocumentData> documentData = new LinkedList<PostDocumentData>();
 		documentData.add(data);
 		
-		Post entry = new Post(word.word, documentData);
+		PostDocumentData[] pd = new PostDocumentData[documentData.size()];
+		pd = documentData.toArray(pd);
+		
+		Post entry = new Post(word.word, pd);
+		
 		Queue.publish(entry);
 	}
 	

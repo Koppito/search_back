@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Database files
+*.odb
+post.odb*
+
 # Log file
 *.log
 

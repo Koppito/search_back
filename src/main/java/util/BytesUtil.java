@@ -36,7 +36,7 @@ public class BytesUtil {
         ObjectInputStream ois = null;
         try {
             bis = new ByteArrayInputStream(bytes);
-            ois = new ObjectInputStream(bis);
+            ois = new ObjectInputStream (bis);
             obj = ois.readObject();
         } finally {
             if (bis != null) {
