@@ -33,10 +33,15 @@ public class IndexManager {
 	
 	private static int updatePostThreadLimit = 1000;
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
-	private static final int nWorkers = 10;
+	public static final int nWorkers = 5;
 	
-	public static void createIndexes() {
-		// TODO: Delete previous post index and empty big queue
+	public static void createIndexes(boolean force) {
+		if (!force) {
+			System.out.println("Just loading previous post...");
+			loadVocabulary();
+			return;
+		}
+		
 		vocabulary = new HashMap<String, Word>();
 		PostDao.getInstance().deleteAll();
 		try {
@@ -99,26 +104,14 @@ public class IndexManager {
 	 
 	public static void loadVocabulary() {
 		List<Post> posts = PostDao.getInstance().getAllPosts();
-		System.out.println(posts.size());
 		
-		//TODO: Implement vocabulary loading
-		/*
-		Iterator it = getDBIterator();
-		if (it == null) {
-			System.out.println("Error loading global vocabulary");
-			return;
-		}
-		
-		while (it.hasNext()) {
-			Post entry = (Post) it.next();
-			Word word = new Word(
-					entry.word, 
-					entry.documents.size(), 
-					entry.documents.get(0).termFrequency
-			);
+		for (Post post: posts) {
+			int nr = post.documents.length; 
+			int maxTF = post.documents[0].termFrequency;
 			
-			vocabulary.put(entry.word, word);
-		}*/
+			Word w = new Word(post.word, nr, maxTF);
+			vocabulary.put(post.word, w);
+		}
 	}
 	
 	public static HashMap<String, Word> getVocabulary() {

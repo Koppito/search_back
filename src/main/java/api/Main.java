@@ -29,7 +29,8 @@ public class Main {
 		});
 		
 		post("/search/index", (req, res) -> {
-			IndexManager.createIndexes();
+			boolean force = (req.queryParams("force") == "");
+			IndexManager.createIndexes(force);
 			return "done";
 		});
 	}

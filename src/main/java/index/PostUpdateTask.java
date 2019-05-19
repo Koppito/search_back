@@ -16,8 +16,8 @@ public class PostUpdateTask  implements Runnable {
 		System.out.println("Worker created!!!!");
 		
 		while (true) {
-			if (lastMessageProcessed - System.currentTimeMillis() >= 120000) {
-				System.out.println("More than 2 minutes have passed since last message, destroying worker");
+			if (lastMessageProcessed - System.currentTimeMillis() >= 10000) {
+				System.out.println("More than 10 seconds have passed since last message, destroying worker");
 				break;
 			}
 			
@@ -50,7 +50,6 @@ public class PostUpdateTask  implements Runnable {
 						dao.persist(entry);
 					}
 				}
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

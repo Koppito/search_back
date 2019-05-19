@@ -32,8 +32,11 @@ public class PostDao {
     	EntityManager em = emf.createEntityManager();
     	EntityTransaction tx = em.getTransaction();
     	tx.begin();
+    	
         em.persist(post);
+        
         tx.commit();
+        em.close();
     }
     
     public List<Post> getAllPosts() {
@@ -48,16 +51,12 @@ public class PostDao {
     
     public Post getPost(String word) {
     	EntityManager em = emf.createEntityManager();
+    	
     	String queryString = String.format("SELECT g FROM Post g WHERE g.word = '%s'", word);
         TypedQuery<Post> query = em.createQuery(queryString, Post.class);
     	Post p = (Post) JpaResultHelper.getSingleResultOrNull(query);
+    	
     	em.close();
-    	
-    	if (p != null && p.documents == null) {
-			System.out.println(String.format("Trying to get null document post with word %s", p.word));
-			return null;
-		}
-    	
     	return p;
     }
     
@@ -71,12 +70,12 @@ public class PostDao {
     	            "DELETE FROM Post",
     	            Post.class).executeUpdate();
     		tx.commit();
-    		em.close();
     	} catch (Exception e){
     		e.printStackTrace();
     		tx.rollback();
-    		em.close();
     	}
+    	
+    	em.close();
     }
     
     
