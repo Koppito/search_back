@@ -16,7 +16,7 @@ public class SearchService {
 	public static final int R = 5;
 	public static final int totalDocs = 2;
 	
-	public Search searchDocuments(String query, int limit) {
+	public Search searchDocuments(String query, int offset, int limit) {
 		String[] queries = query
 				.replaceAll("[^A-Za-z]+", " ")
 				.toLowerCase()
@@ -42,7 +42,7 @@ public class SearchService {
 		for (Word w : words) {
 			Post post = dao.getPost(w.word);
 			
-			for (int x = 0; x < post.documents.length && x < R; x++) {
+			for (int x = 0; x < post.documents.length && x < limit; x++) {
 				DocumentRank existing = candidates.get(post.documents[x].document);
 				if (existing != null) {
 					existing.addRank(w);
@@ -69,7 +69,10 @@ public class SearchService {
 			results.add(new Document(docID, new DocumentService().getDocumentSample(docID, 5)));
 		}
 		
-		return new Search(results, new Paging(0, limit));
+		int start = (offset > results.size()) ? results.size() : offset;
+		int end = ((offset + limit) > results.size()) ? results.size() : (offset + limit);
+		
+		return new Search(results.subList(start, end), new Paging(offset, limit, results.size()));
 	}
 	
 	private class DocumentRank {

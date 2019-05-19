@@ -33,7 +33,7 @@ public class IndexManager {
 	
 	private static int updatePostThreadLimit = 1000;
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
-	public static final int nWorkers = 20;
+	public static final int nWorkers = 100;
 	
 	public static void createIndexes(boolean force) {
 		if (!force) {
