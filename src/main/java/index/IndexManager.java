@@ -33,7 +33,7 @@ public class IndexManager {
 	
 	private static int updatePostThreadLimit = 1000;
 	private static HashMap<String, Word> vocabulary = new HashMap<String, Word>(); 
-	public static final int nWorkers = 100;
+	public static final int nWorkers = 5;
 	
 	public static void createIndexes(boolean force) {
 		if (!force) {
@@ -52,8 +52,13 @@ public class IndexManager {
 		
 		startPostUpdateWorkers();
 
-		ClassLoader classLoader = new IndexManager().getClass().getClassLoader();
-		URL documents = classLoader.getResource("./documents");
+		URL documents = null;
+		try {			
+			ClassLoader classLoader = new IndexManager().getClass().getClassLoader();
+			documents = classLoader.getResource("./documents");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		try (Stream<Path> walk = Files.walk(Paths.get(documents.getPath()))) {
 			List<String> result = walk
