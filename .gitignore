@@ -1,4 +1,4 @@
-# Compiled class file
+﻿# Compiled class file
 *.class
 
 # Database files
@@ -14,7 +14,7 @@ post.odb*
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
-src/main/resources/documents
+src/main/resources
 
 # Package Files #
 *.jar
